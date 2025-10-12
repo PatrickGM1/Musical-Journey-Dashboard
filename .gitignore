@@ -1,0 +1,101 @@
+# ========================================
+# GLOBAL IGNORE (root level)
+# ========================================
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+.idea/
+.vscode/
+*.iml
+
+# Env / Secrets
+.env
+.env.local
+*.envrc
+# Keep this one for docs:
+!.env.example
+
+# Build / Runtime
+dist/
+build/
+node_modules/
+coverage/
+out/
+tmp/
+.cache/
+.gradle/
+target/
+bin/
+logs/
+data/
+uploads/
+__pycache__/
+
+# Docker
+*.pid
+*.tar
+*.bak
+*.old
+.docker/
+docker-compose.override.yml
+.env.docker.local
+
+# ========================================
+# FRONTEND (React + Vite)
+# ========================================
+frontend/node_modules/
+frontend/.vite/
+frontend/dist/
+frontend/.env
+frontend/.DS_Store
+frontend/.eslintcache
+frontend/coverage/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/package-lock.json
+
+# ========================================
+# BACKEND (Spring Boot)
+# ========================================
+backend/target/
+backend/.gradle/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.idea/
+backend/.env
+backend/logs/
+backend/data/
+backend/uploads/
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/.mvn/wrapper/maven-wrapper.properties.bak
+
+# ========================================
+# TEST / OUTPUT FILES
+# ========================================
+*.out
+*.err
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# ========================================
+# SYSTEM-SPECIFIC
+# ========================================
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.stackdump
+
+# ========================================
+# END
+# ========================================
