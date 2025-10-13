@@ -37,7 +37,7 @@ It’s a side project I’m building while learning more about full-stack develo
 3. Backend: [http://localhost:8080](http://localhost:8080)  
    Swagger UI: [http://localhost:8080/swagger-ui](http://localhost:8080/swagger-ui)
 
-4. Frontend: [http://localhost:5173](http://localhost:5173)  
+4. Frontend: [http://localhost:80](http://localhost:80)  
 
 ---
 
