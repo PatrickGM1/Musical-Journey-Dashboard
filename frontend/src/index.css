@@ -1,0 +1,187 @@
+/* ====== Spotify palette + base ====== */
+:root{
+  --sp-black:#121212;
+  --sp-dark:#181818;
+  --sp-green:#1DB954;
+  --sp-white:#FFFFFF;
+  --sp-muted:#B3B3B3;
+
+  --page-max: 1600px;          /* widen if you’ve got ultra-wide screens */
+  --gutter: clamp(16px, 3vw, 40px);
+  --radius: 16px;
+}
+
+*{ box-sizing: border-box; }
+html,body{ height:100%; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--sp-black);
+  color: var(--sp-white);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* no horizontal scroll */
+}
+
+/* ====== Layout ====== */
+.container{
+  width: 100%;
+  max-width: min(var(--page-max), 98vw);   /* nearly full width */
+  margin: 0 auto;                          /* center */
+  padding: 32px var(--gutter);
+}
+
+/* ====== Header ====== */
+header{
+  text-align: center;
+  margin-bottom: 28px;
+}
+header h1{
+  margin: 0 0 8px 0;
+  font-size: clamp(28px, 5vw, 56px);
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--sp-green);
+  letter-spacing: 0.2px;
+}
+header p{
+  margin: 0;
+  color: var(--sp-muted);
+  font-size: clamp(14px, 1.6vw, 18px);
+}
+
+/* ====== Card ====== */
+.card{
+  width: 100%;
+  background: var(--sp-dark);
+  border-radius: var(--radius);
+  padding: clamp(16px, 2.5vw, 28px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* ====== Form grid (PracticeLog) ====== */
+.grid{
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(12, 1fr); /* wide baseline */
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.field{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label{
+  font-size: 12px;
+  line-height: 1;
+  color: var(--sp-muted);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+
+/* Map first 6 controls nicely across 12 cols */
+.grid > *:nth-child(1){ grid-column: span 2; } /* date */
+.grid > *:nth-child(2){ grid-column: span 2; } /* instrument */
+.grid > *:nth-child(3){ grid-column: span 4; } /* focus */
+.grid > *:nth-child(4){ grid-column: span 1; } /* duration */
+.grid > *:nth-child(5){ grid-column: span 2; } /* notes */
+.grid > *:nth-child(6){ grid-column: span 1; } /* mood */
+.grid .right{ grid-column: 11 / -1; display:flex; justify-content:flex-end; }
+
+/* Collapse gracefully on medium screens */
+@media (max-width: 1200px){
+  .grid{ grid-template-columns: repeat(8, 1fr); }
+  .grid > *{ grid-column: span 2; }
+  .grid .right{ grid-column: 7 / -1; }
+}
+/* Stack on phones */
+@media (max-width: 720px){
+  .grid{ grid-template-columns: repeat(2, 1fr); }
+  .grid > *{ grid-column: span 2; }
+  .grid .right{ grid-column: span 2; justify-content: stretch; }
+  .grid .right button{ width: 100%; }
+}
+
+/* ====== Inputs / selects ====== */
+input, select{
+  width: 100%;
+  background: #232323;
+  border: 1px solid #2d2d2d;
+  color: var(--sp-white);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+input::placeholder{ color: #8b8b8b; }
+input:focus, select:focus{
+  border-color: var(--sp-green);
+  box-shadow: 0 0 0 3px rgba(29,185,84,.15);
+  background: #262626;
+}
+
+/* Remove spinners on number input (WebKit) */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button{
+  -webkit-appearance: none; margin: 0;
+}
+
+/* ====== Buttons ====== */
+button{
+  background: var(--sp-green);
+  color: var(--sp-white);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform .04s ease, background .15s ease, box-shadow .15s ease;
+}
+button:hover{ background: #20dc65; }
+button:active{ transform: translateY(1px); }
+button:disabled{ opacity: .6; cursor: not-allowed; }
+button.link{
+  background: transparent;
+  color: #ff5e5e;
+  font-weight: 600;
+  padding: 8px 10px;
+}
+
+/* ====== Table ====== */
+table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 14px;
+}
+th, td{
+  text-align: left;
+  padding: 12px 8px;
+}
+th{
+  color: var(--sp-green);
+  border-bottom: 1px solid #2a2a2a;
+  font-weight: 700;
+}
+td{
+  border-bottom: 1px solid #222;
+  color: #e7e7e7;
+}
+tbody tr:hover td{
+  background: rgba(255,255,255,.04);
+}
+
+/* ====== Utilities ====== */
+.muted{ color: var(--sp-muted); }
+.center{ text-align:center; }
+.right{ text-align:right; }
+
+
