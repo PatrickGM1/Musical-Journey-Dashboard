@@ -1,0 +1,1 @@
+ALTER TABLE songs ALTER COLUMN status TYPE VARCHAR(32) USING status::text;

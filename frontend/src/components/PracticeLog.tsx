@@ -84,7 +84,7 @@ export default function PracticeLog() {
 
         <div className="field">
           <label htmlFor="mood">Mood</label>
-          <input id="mood" placeholder="🙂 😀 🔥 ..."
+          <input id="mood" placeholder="..."
             value={form.mood}
             onChange={e => setForm({ ...form, mood: e.target.value })} />
         </div>

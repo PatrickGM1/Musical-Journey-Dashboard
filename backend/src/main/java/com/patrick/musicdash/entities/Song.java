@@ -25,7 +25,7 @@ public class Song {
     private String instrument;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 16)
+    @Column(length = 32)
     private Status status;
 
     @Column(name = "key_sig", length = 12)
