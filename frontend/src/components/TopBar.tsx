@@ -8,6 +8,7 @@ export default function TopBar() {
         <nav className="nav">
           <NavLink to="/practice" className="nav__link">Practice</NavLink>
           <NavLink to="/repertoire" className="nav__link">Repertoire</NavLink>
+          <NavLink to="/sheets" className="nav__link">Sheets</NavLink>
 
         </nav>
 

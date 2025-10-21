@@ -1,10 +1,11 @@
-import { Routes, Route, Navigate } from "react-router-dom"
-import TopBar from "./components/TopBar"
-import MainPage from "./pages/MainPage"
-import PracticePage from "./pages/PracticePage"
-import RepertoirePage from "./pages/RepertoirePage"
+import { Routes, Route, Navigate } from "react-router-dom";
+import TopBar from "./components/TopBar";
+import MainPage from "./pages/MainPage";
+import PracticePage from "./pages/PracticePage";
+import RepertoirePage from "./pages/RepertoirePage";
+import SheetsPage from "./pages/SheetsPage";
 
-import "./index.css"
+import "./index.css";
 
 export default function App() {
   return (
@@ -21,8 +22,9 @@ export default function App() {
           <Route path="/practice" element={<PracticePage />} />
           <Route path="/repertoire" element={<RepertoirePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/sheets" element={<SheetsPage />} />
         </Routes>
       </div>
     </>
-  )
+  );
 }
