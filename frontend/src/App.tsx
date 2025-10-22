@@ -4,6 +4,7 @@ import MainPage from "./pages/MainPage";
 import PracticePage from "./pages/PracticePage";
 import RepertoirePage from "./pages/RepertoirePage";
 import SheetsPage from "./pages/SheetsPage";
+import LinksPage from "./pages/LinksPage";
 
 import "./index.css";
 
@@ -23,6 +24,8 @@ export default function App() {
           <Route path="/repertoire" element={<RepertoirePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/sheets" element={<SheetsPage />} />
+          <Route path="/links" element={<LinksPage />} />
+
         </Routes>
       </div>
     </>
