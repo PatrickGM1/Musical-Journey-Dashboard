@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { PracticeView } from '../api'
-import { addPractice, deletePractice, listPractice } from '../api'
+import type { PracticeView } from '../api/practice'
+import { addPractice, deletePractice, listPractice } from '../api/practice'
 
 
 const today = () => new Date().toISOString().slice(0, 10)

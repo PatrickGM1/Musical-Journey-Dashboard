@@ -11,7 +11,7 @@ const tiles: Tile[] = [
     { to: "/practice", title: "Practice", subtitle: "Log sessions, track minutes" },
     { to: "/repertoire", title: "Repertoire", subtitle: "Songs you’re learning" },
     { to: "/sheets", title: "Sheets", subtitle: "PDFs, images, MIDI"},
-    { to: "/links", title: "Links", subtitle: "Tutorials & references", wip: true },
+    { to: "/links", title: "Links", subtitle: "Tutorials & references" },
     { to: "/settings", title: "Settings", subtitle: "Preferences", wip: true },
 ]
 

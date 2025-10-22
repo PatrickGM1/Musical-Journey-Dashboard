@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
-import type { SongCreate, SongView } from "../api"
-import { addSong, deleteSong, listSongs, setSongStatus } from "../api"
+import type { SongCreate, SongView } from "../api/songs"
+import { addSong, deleteSong, listSongs, setSongStatus } from "../api/songs"
 
 const STATUS: SongView["status"][] = ["LEARNING", "POLISHING", "MASTERED"]
 const nextStatus = (s: SongView["status"]) => STATUS[Math.min(STATUS.indexOf(s) + 1, STATUS.length - 1)]

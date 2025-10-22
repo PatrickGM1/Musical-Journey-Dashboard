@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { deleteSheet, downloadSheetUrl, listSheets, uploadSheet, type SheetView } from "../api"
+import { deleteSheet, downloadSheetUrl, listSheets, uploadSheet, type SheetView } from "../api/sheets"
 
 export default function SheetsPage(){
   const [items, setItems] = useState<SheetView[]>([])
