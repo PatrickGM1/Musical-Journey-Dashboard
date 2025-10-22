@@ -12,17 +12,11 @@ const tiles: Tile[] = [
     { to: "/repertoire", title: "Repertoire", subtitle: "Songs you’re learning" },
     { to: "/sheets", title: "Sheets", subtitle: "PDFs, images, MIDI"},
     { to: "/links", title: "Links", subtitle: "Tutorials & references" },
-    { to: "/settings", title: "Settings", subtitle: "Preferences", wip: true },
 ]
 
 export default function MainPage() {
     return (
-        <div className="card">
-            <h2>Welcome to MusicDash</h2>
-            <p className="muted" style={{ marginTop: 4, marginBottom: 16 }}>
-                Pick a section to get started.
-            </p>
-
+        <div className="main-page">
             <div className="tiles">
                 {tiles.map((t) => {
                     const content = (

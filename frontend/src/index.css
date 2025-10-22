@@ -178,31 +178,41 @@ td{ border-bottom: 1px solid #222; color: #e7e7e7; }
 tbody tr:hover td{ background: rgba(255,255,255,.04); }
 
 /* ---------- Main Page: Tiles ---------- */
+.main-page{
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
 .tiles{
   display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 900px;
+  margin: 0 auto;
 }
 .tile{
-  grid-column: span 4; /* 3 across on wide screens */
-  display: flex; flex-direction: column; gap: 6px;
+  display: flex; flex-direction: column; gap: 8px;
   text-decoration: none;
   background: var(--sp-surface);
   border: 1px solid var(--sp-border);
   border-radius: 14px;
-  padding: 14px 16px;
+  padding: 20px 20px;
   color: var(--sp-white);
   transition: transform .06s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  min-height: 120px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 .tile:hover{
   border-color: var(--sp-green);
   background: #202020;
   box-shadow: 0 0 0 3px rgba(29,185,84,.12) inset;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 .tile--wip:hover{ box-shadow: 0 0 0 3px rgba(29,185,84,.08) inset; }
 .tile-head{ display:flex; align-items:center; gap:8px; }
-.tile-title{ font-weight: 800; letter-spacing:.2px; }
+.tile-title{ font-weight: 800; letter-spacing:.2px; font-size: 16px; }
 .tile-sub{ color: var(--sp-muted); font-size: 13px; }
 .badge{
   font-size: 11px; color:#0b2615; background: var(--sp-green);
@@ -210,8 +220,7 @@ tbody tr:hover td{ background: rgba(255,255,255,.04); }
 }
 .tile--disabled{ pointer-events:none; opacity:.6; border-style:dashed; }
 
-@media (max-width: 1200px){ .tiles{ grid-template-columns: repeat(8, 1fr); } .tile{ grid-column: span 4; } }
-@media (max-width: 720px){ .tiles{ grid-template-columns: repeat(2, 1fr); } .tile{ grid-column: span 2; } }
+@media (max-width: 720px){ .tiles{ grid-template-columns: 1fr; max-width: 100%; } }
 
 /* ---------- Practice form grid ---------- */
 .grid{

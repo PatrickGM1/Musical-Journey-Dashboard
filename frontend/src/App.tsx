@@ -25,7 +25,6 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/sheets" element={<SheetsPage />} />
           <Route path="/links" element={<LinksPage />} />
-
         </Routes>
       </div>
     </>
