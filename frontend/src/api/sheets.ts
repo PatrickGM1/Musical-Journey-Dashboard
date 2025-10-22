@@ -29,8 +29,8 @@ export async function uploadSheet(
   return r.json();
 }
 
-export function downloadSheetUrl(id: string) {
-  return `/api/sheets/${id}/download`;
+export function downloadSheetUrl(id: string, inline: boolean = false) {
+  return `/api/sheets/${id}/download${inline ? '?inline=true' : ''}`;
 }
 
 export async function deleteSheet(id: string) {

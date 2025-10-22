@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { deleteSheet, downloadSheetUrl, listSheets, uploadSheetWithSong, type SheetView } from "../api/sheets"
+import Modal from "../components/Modal"
 
 export default function SheetsPage(){
   const [items, setItems] = useState<SheetView[]>([])
@@ -7,6 +8,7 @@ export default function SheetsPage(){
   const [instrument, setInstrument] = useState("Piano")
   const [songTitle, setSongTitle] = useState("")
   const [songId, setSongId] = useState("")
+  const [preview, setPreview] = useState<SheetView | null>(null)
 
   const load = async () => {
     setBusy(true)
@@ -14,6 +16,9 @@ export default function SheetsPage(){
     finally { setBusy(false) }
   }
   useEffect(() => { load() }, [])
+
+  const isPdf = (ct?: string, name?: string) =>
+    (ct && ct.toLowerCase().includes("pdf")) || (name && name.toLowerCase().endsWith(".pdf"))
 
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]
@@ -63,7 +68,7 @@ export default function SheetsPage(){
         </div>
         <div className="field span-4">
           <label>Upload</label>
-          <input type="file" onChange={onFile} disabled={busy}/>
+          <input type="file" accept=".pdf,.png,.jpg,.jpeg" onChange={onFile} disabled={busy}/>
         </div>
       </div>
 
@@ -81,7 +86,10 @@ export default function SheetsPage(){
               <td>{f.songTitle}</td>
               <td>{f.contentType}</td>
               <td>{fmt(f.sizeBytes)}</td>
-              <td className="right" style={{whiteSpace:'nowrap'}}>
+              <td className="right" style={{whiteSpace:'nowrap', display:'flex', gap:8, justifyContent:'flex-end'}}>
+                {isPdf(f.contentType, f.originalName)
+                  ? <button className="chip" onClick={()=>setPreview(f)}>Preview</button>
+                  : <a className="chip" href={downloadSheetUrl(f.id, true)} target="_blank" rel="noreferrer">Open</a>}
                 <a className="chip" href={downloadSheetUrl(f.id)}>Download</a>
                 <button className="chip danger" onClick={()=>remove(f.id)} disabled={busy}>Delete</button>
               </td>
@@ -90,6 +98,16 @@ export default function SheetsPage(){
           {items.length===0 && <tr><td colSpan={6} className="muted">No files yet.</td></tr>}
         </tbody>
       </table>
+
+      <Modal open={!!preview} onClose={()=>setPreview(null)} title={preview?.originalName}>
+        {preview && isPdf(preview.contentType, preview.originalName)
+          ? <iframe
+              title="pdf-preview"
+              src={downloadSheetUrl(preview.id, true)}
+              style={{border:0, width:"100%", height:"100%", background:"#111"}}
+            />
+          : <div style={{padding:16, color:"#ccc"}}>No inline preview. Use "Open" or "Download".</div>}
+      </Modal>
     </div>
   )
 }

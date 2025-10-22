@@ -74,15 +74,27 @@ public class SheetController {
   }
 
   @GetMapping("/{id}/download")
-  public ResponseEntity<FileSystemResource> download(@PathVariable UUID id) throws IOException {
+  public ResponseEntity<FileSystemResource> download(
+      @PathVariable UUID id,
+      @RequestParam(value = "inline", required = false, defaultValue = "false") boolean inline
+  ) throws IOException {
     Sheet s = repo.findById(id).orElseThrow();
     FileSystemResource file = new FileSystemResource(storage.pathOf(s.getStoredName()));
     if (!file.exists()) return ResponseEntity.notFound().build();
 
     HttpHeaders headers = new HttpHeaders();
-    headers.setContentDisposition(
-        ContentDisposition.attachment().filename(s.getOriginalName()).build()
-    );
+    
+    // Use inline disposition for preview, attachment for download
+    if (inline) {
+      headers.setContentDisposition(
+          ContentDisposition.inline().filename(s.getOriginalName()).build()
+      );
+    } else {
+      headers.setContentDisposition(
+          ContentDisposition.attachment().filename(s.getOriginalName()).build()
+      );
+    }
+    
     MediaType mt = (s.getContentType() != null)
         ? MediaType.parseMediaType(s.getContentType())
         : MediaType.APPLICATION_OCTET_STREAM;
