@@ -3,6 +3,8 @@ package com.patrick.musicdash.controllers;
 import com.patrick.musicdash.dto.sheet.SheetView;
 import com.patrick.musicdash.entities.Sheet;
 import com.patrick.musicdash.repos.SheetRepo;
+import com.patrick.musicdash.repos.SongRepo;
+import com.patrick.musicdash.entities.Song;
 import com.patrick.musicdash.services.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -27,37 +30,47 @@ public class SheetController {
 
   private final SheetRepo repo;
   private final StorageService storage;
+  private final SongRepo songRepo;
 
   @GetMapping
-  public List<SheetView> list() {
-    return repo.findAll().stream().map(this::view).collect(Collectors.toList());
+  public List<SheetView> list(@RequestParam(value = "songId", required = false) UUID songId) {
+    List<Sheet> all = (songId == null)
+        ? repo.findAll()
+        : repo.findAll().stream()
+            .filter(s -> s.getSong() != null && s.getSong().getId().equals(songId))
+            .collect(Collectors.toList());
+    return all.stream().map(this::view).collect(Collectors.toList());
   }
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public SheetView upload(@RequestPart("file") MultipartFile file,
-                          @RequestPart(value = "instrument", required = false) String instrument,
-                          @RequestPart(value = "songTitle", required = false) String songTitle)
+                          @RequestParam(value = "instrument", required = false) String instrument,
+                          @RequestParam(value = "songTitle", required = false) String songTitle,
+                          @RequestParam(value = "songId", required = false) UUID songId)
       throws IOException {
 
     if (file == null || file.isEmpty()) {
       throw new IllegalArgumentException("Empty file");
     }
 
-    String stored = storage.save(file);
+  String stored = storage.save(file);
 
-    Sheet saved = repo.save(
-        Sheet.builder()
-            .originalName(file.getOriginalFilename())
-            .contentType(file.getContentType())
-            .sizeBytes(file.getSize())
-            .instrument(instrument)
-            .songTitle(songTitle)
-            .storedName(stored)
-            .uploadedAt(OffsetDateTime.now())
-            .build()
-    );
+  Song song = (songId != null) ? songRepo.findById(songId).orElse(null) : null;
 
-    return view(saved);
+  Sheet saved = repo.save(
+    Sheet.builder()
+      .originalName(file.getOriginalFilename())
+      .contentType(file.getContentType())
+      .sizeBytes(file.getSize())
+      .instrument(instrument)
+      .songTitle(songTitle)
+      .storedName(stored)
+      .uploadedAt(OffsetDateTime.now())
+      .song(song)
+      .build()
+  );
+
+  return view(saved);
   }
 
   @GetMapping("/{id}/download")
@@ -96,6 +109,7 @@ public class SheetController {
     v.instrument = s.getInstrument();
     v.songTitle = s.getSongTitle();
     v.uploadedAt = s.getUploadedAt();
+    v.songId = (s.getSong() != null) ? s.getSong().getId() : null;
     return v;
   }
 }

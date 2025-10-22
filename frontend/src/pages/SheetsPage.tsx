@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react"
-import { deleteSheet, downloadSheetUrl, listSheets, uploadSheet, type SheetView } from "../api/sheets"
+import { deleteSheet, downloadSheetUrl, listSheets, uploadSheetWithSong, type SheetView } from "../api/sheets"
 
 export default function SheetsPage(){
   const [items, setItems] = useState<SheetView[]>([])
   const [busy, setBusy] = useState(false)
   const [instrument, setInstrument] = useState("Piano")
   const [songTitle, setSongTitle] = useState("")
+  const [songId, setSongId] = useState("")
 
   const load = async () => {
     setBusy(true)
-    try { setItems(await listSheets()) }
+    try { setItems(await listSheets({ songId: songId || undefined })) }
     finally { setBusy(false) }
   }
   useEffect(() => { load() }, [])
@@ -19,7 +20,7 @@ export default function SheetsPage(){
     if (!f) return
     setBusy(true)
     try {
-      await uploadSheet(f, { instrument, songTitle: songTitle.trim() || undefined })
+      await uploadSheetWithSong(f, { instrument, songTitle: songTitle.trim() || undefined, songId: songId || undefined })
       setSongTitle("")
       await load()
     } finally {
@@ -50,6 +51,10 @@ export default function SheetsPage(){
           <select value={instrument} onChange={e=>setInstrument(e.target.value)} disabled={busy}>
             <option>Piano</option><option>Guitar</option><option>Other</option>
           </select>
+        </div>
+        <div className="field span-3">
+          <label>Filter by Song ID</label>
+          <input placeholder="UUID…" value={songId} onChange={e=>setSongId(e.target.value)} disabled={busy} />
         </div>
         <div className="field span-5">
           <label>Song title (optional)</label>

@@ -11,4 +11,5 @@ public class SheetView {
     public String instrument;
     public String songTitle;
     public OffsetDateTime uploadedAt;
+    public UUID songId;
 }

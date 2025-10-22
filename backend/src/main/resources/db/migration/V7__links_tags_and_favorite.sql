@@ -1,0 +1,5 @@
+ALTER TABLE links
+  ADD COLUMN tags VARCHAR(400),
+  ADD COLUMN favorite BOOLEAN NOT NULL DEFAULT FALSE;
+
+CREATE INDEX IF NOT EXISTS idx_links_favorite ON links(favorite);

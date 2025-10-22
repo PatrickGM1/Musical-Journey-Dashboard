@@ -29,4 +29,7 @@ public class Sheet {
     private String storedName;
     @Column(name = "uploaded_at", nullable = false)
     private OffsetDateTime uploadedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "song_id")
+    private Song song;
 }

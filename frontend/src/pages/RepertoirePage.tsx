@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react"
 import type { SongCreate, SongView } from "../api/songs"
 import { addSong, deleteSong, listSongs, setSongStatus } from "../api/songs"
+import { uploadSheetWithSong } from "../api/sheets"
+import SongSheets from "../components/SongSheets"
 
 const STATUS: SongView["status"][] = ["LEARNING", "POLISHING", "MASTERED"]
 const nextStatus = (s: SongView["status"]) => STATUS[Math.min(STATUS.indexOf(s) + 1, STATUS.length - 1)]
@@ -10,6 +12,7 @@ export default function RepertoirePage() {
   const [songs, setSongs] = useState<SongView[]>([])
   const [busy, setBusy] = useState(false)
   const [q, setQ] = useState("")
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({})
   const [form, setForm] = useState<SongCreate>({
     title: "",
     artist: "",
@@ -140,20 +143,41 @@ export default function RepertoirePage() {
         </thead>
         <tbody>
           {filtered.map(s => (
-            <tr key={s.id}>
-              <td>{s.title}</td>
-              <td>{s.artist}</td>
-              <td>{s.instrument}</td>
-              <td><span className={`pill pill--${s.status.toLowerCase()}`}>{s.status}</span></td>
-              <td>{s.keySig}</td>
-              <td>{s.bpm}</td>
-              <td>{s.notes}</td>
-              <td className="right" style={{whiteSpace:'nowrap'}}>
-                <button className="chip" disabled={s.status==='LEARNING'} onClick={()=>handleStatus(s.id, prevStatus(s.status))}>◀</button>
-                <button className="chip" disabled={s.status==='MASTERED'} onClick={()=>handleStatus(s.id, nextStatus(s.status))}>▶</button>
-                <button className="chip danger" onClick={()=>handleDelete(s.id)}>Delete</button>
-              </td>
-            </tr>
+            <>
+              <tr key={s.id}>
+                <td>{s.title}</td>
+                <td>{s.artist}</td>
+                <td>{s.instrument}</td>
+                <td><span className={`pill pill--${s.status.toLowerCase()}`}>{s.status}</span></td>
+                <td>{s.keySig}</td>
+                <td>{s.bpm}</td>
+                <td>{s.notes}</td>
+                <td className="right" style={{whiteSpace:'nowrap'}}>
+                  <button className="chip" title="Toggle sheets" onClick={()=>setExpanded({...expanded, [s.id]: !expanded[s.id]})}>📎</button>
+                  <button className="chip" disabled={s.status==='LEARNING'} onClick={()=>handleStatus(s.id, prevStatus(s.status))}>◀</button>
+                  <button className="chip" disabled={s.status==='MASTERED'} onClick={()=>handleStatus(s.id, nextStatus(s.status))}>▶</button>
+                  <button className="chip danger" onClick={()=>handleDelete(s.id)}>Delete</button>
+                  <label className="chip" style={{cursor:"pointer", marginLeft: 8}}>
+                    Attach Sheet
+                    <input type="file" style={{display:"none"}} onChange={async (e)=>{
+                      const f = e.target.files?.[0]; if(!f) return
+                      try {
+                        await uploadSheetWithSong(f, { songId: s.id, instrument: s.instrument, songTitle: s.title })
+                        // optional: toast, reload a side panel, etc.
+                        await load()
+                      } finally { (e.target as HTMLInputElement).value = "" }
+                    }} />
+                  </label>
+                </td>
+              </tr>
+              {expanded[s.id] && (
+                <tr>
+                  <td colSpan={8} style={{background:"#161616"}}>
+                    <SongSheets songId={s.id} />
+                  </td>
+                </tr>
+              )}
+            </>
           ))}
           {filtered.length === 0 && (
             <tr><td colSpan={8} className="muted">No songs yet.</td></tr>

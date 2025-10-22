@@ -22,6 +22,13 @@ public class Link {
     private String category;
     private String notes;
 
+    @Column(length = 400)
+    private String tags;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean favorite = false;
+
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 }
