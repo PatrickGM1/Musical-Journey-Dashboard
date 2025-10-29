@@ -1,5 +1,3 @@
-// ---------- PRACTICE LOGS ----------
-
 export type PracticeView = {
   id: string
   date: string

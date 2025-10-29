@@ -9,16 +9,16 @@ function SongSheets({ songId }: { songId: string }) {
     try { setFiles(await listSheets({ songId })) }
     finally { setBusy(false) }
   }
-  useEffect(()=>{ load() }, [songId])
+  useEffect(() => { load() }, [songId])
 
-  if (!files || files.length === 0) return <div className="muted" style={{padding:"8px 0"}}>No sheets linked.</div>
+  if (!files || files.length === 0) return <div className="muted" style={{ padding: "8px 0" }}>No sheets linked.</div>
 
   return (
-    <div style={{padding:"8px 0"}}>
+    <div style={{ padding: "8px 0" }}>
       {files.map(f => (
-        <span key={f.id} className="chip" style={{marginRight:8}}>
+        <span key={f.id} className="chip" style={{ marginRight: 8 }}>
           <a href={downloadSheetUrl(f.id)}>{f.originalName}</a>
-          <button className="chip danger" onClick={async ()=>{
+          <button className="chip danger" onClick={async () => {
             if (!confirm("Delete this file?")) return
             setBusy(true)
             try { await deleteSheet(f.id); await load() }
