@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { listSheets, downloadSheetUrl, deleteSheet, type SheetView } from "../api/sheets"
 
-function SongSheets({ songId }: { songId: string }) {
+function SongSheets({ songId, onUpdate }: { songId: string; onUpdate?: () => void }) {
   const [files, setFiles] = useState<SheetView[]>([])
   const [busy, setBusy] = useState(false)
   const load = async () => {
@@ -10,6 +10,12 @@ function SongSheets({ songId }: { songId: string }) {
     finally { setBusy(false) }
   }
   useEffect(()=>{ load() }, [songId])
+  
+  useEffect(() => {
+    if (onUpdate) {
+      load()
+    }
+  }, [onUpdate])
 
   if (!files || files.length === 0) return <div className="muted" style={{padding:"8px 0"}}>No sheets linked.</div>
 

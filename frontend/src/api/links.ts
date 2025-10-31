@@ -7,6 +7,7 @@ export interface LinkView {
   tags: string[];
   favorite: boolean;
   createdAt: string;
+  songId?: string;
 }
 
 export interface LinkCreate {
@@ -16,12 +17,14 @@ export interface LinkCreate {
   notes?: string;
   tags?: string[];
   favorite?: boolean;
+  songId?: string;
 }
 
 const API = "/api/links";
 
-export async function listLinks(): Promise<LinkView[]> {
-  const res = await fetch(API);
+export async function listLinks(params?: { songId?: string }): Promise<LinkView[]> {
+  const url = params?.songId ? `${API}?songId=${params.songId}` : API;
+  const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to load links");
   return res.json();
 }

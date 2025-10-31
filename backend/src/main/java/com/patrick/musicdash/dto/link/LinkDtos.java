@@ -11,7 +11,8 @@ public class LinkDtos {
             String category,
             String notes,
             List<String> tags,
-            Boolean favorite) {
+            Boolean favorite,
+            UUID songId) {
     }
 
     public record LinkView(
@@ -22,6 +23,7 @@ public class LinkDtos {
             String notes,
             List<String> tags,
             boolean favorite,
-            OffsetDateTime createdAt) {
+            OffsetDateTime createdAt,
+            UUID songId) {
     }
 }

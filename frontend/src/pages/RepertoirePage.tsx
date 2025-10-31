@@ -2,7 +2,10 @@ import { useEffect, useMemo, useState } from "react"
 import type { SongCreate, SongView } from "../api/songs"
 import { addSong, deleteSong, listSongs, setSongStatus } from "../api/songs"
 import { uploadSheetWithSong } from "../api/sheets"
+import { addLink, type LinkCreate } from "../api/links"
 import SongSheets from "../components/SongSheets"
+import SongLinks from "../components/SongLinks"
+import Modal from "../components/Modal"
 
 const STATUS: SongView["status"][] = ["LEARNING", "POLISHING", "MASTERED"]
 const nextStatus = (s: SongView["status"]) => STATUS[Math.min(STATUS.indexOf(s) + 1, STATUS.length - 1)]
@@ -13,6 +16,17 @@ export default function RepertoirePage() {
   const [busy, setBusy] = useState(false)
   const [q, setQ] = useState("")
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
+  const [updateTrigger, setUpdateTrigger] = useState<Record<string, number>>({})
+  const [showLinkModal, setShowLinkModal] = useState(false)
+  const [currentSongId, setCurrentSongId] = useState<string | null>(null)
+  const [linkForm, setLinkForm] = useState<LinkCreate>({
+    title: "",
+    url: "",
+    category: "",
+    notes: "",
+    tags: [],
+    favorite: false
+  })
   const [form, setForm] = useState<SongCreate>({
     title: "",
     artist: "",
@@ -22,6 +36,10 @@ export default function RepertoirePage() {
     bpm: 120,
     notes: ""
   })
+
+  const triggerUpdate = (songId: string) => {
+    setUpdateTrigger(prev => ({ ...prev, [songId]: (prev[songId] || 0) + 1 }))
+  }
 
   const load = async () => {
     setBusy(true)
@@ -49,6 +67,24 @@ export default function RepertoirePage() {
     if (!confirm("Delete this song?")) return
     setBusy(true)
     try { await deleteSong(id); await load() } finally { setBusy(false) }
+  }
+
+  const handleAddLink = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!linkForm.title.trim() || !linkForm.url.trim() || !currentSongId) return
+    setBusy(true)
+    try {
+      await addLink({ ...linkForm, songId: currentSongId })
+      setLinkForm({ title: "", url: "", category: "", notes: "", tags: [], favorite: false })
+      setShowLinkModal(false)
+      triggerUpdate(currentSongId)
+      setCurrentSongId(null)
+    } finally { setBusy(false) }
+  }
+
+  const openLinkModal = (songId: string) => {
+    setCurrentSongId(songId)
+    setShowLinkModal(true)
   }
 
   const filtered = useMemo(() => {
@@ -153,7 +189,7 @@ export default function RepertoirePage() {
                 <td>{s.bpm}</td>
                 <td>{s.notes}</td>
                 <td className="right" style={{whiteSpace:'nowrap'}}>
-                  <button className="chip" title="Toggle sheets" onClick={()=>setExpanded({...expanded, [s.id]: !expanded[s.id]})}>📎</button>
+                  <button className="chip" title="Toggle sheets & links" onClick={()=>setExpanded({...expanded, [s.id]: !expanded[s.id]})}>📎</button>
                   <button className="chip" disabled={s.status==='LEARNING'} onClick={()=>handleStatus(s.id, prevStatus(s.status))}>◀</button>
                   <button className="chip" disabled={s.status==='MASTERED'} onClick={()=>handleStatus(s.id, nextStatus(s.status))}>▶</button>
                   <button className="chip danger" onClick={()=>handleDelete(s.id)}>Delete</button>
@@ -163,17 +199,24 @@ export default function RepertoirePage() {
                       const f = e.target.files?.[0]; if(!f) return
                       try {
                         await uploadSheetWithSong(f, { songId: s.id, instrument: s.instrument, songTitle: s.title })
-                        // optional: toast, reload a side panel, etc.
-                        await load()
+                        triggerUpdate(s.id)
                       } finally { (e.target as HTMLInputElement).value = "" }
                     }} />
                   </label>
+                  <button className="chip" onClick={()=>openLinkModal(s.id)}>Add Link</button>
                 </td>
               </tr>
               {expanded[s.id] && (
                 <tr>
                   <td colSpan={8} style={{background:"#161616"}}>
-                    <SongSheets songId={s.id} />
+                    <div style={{marginBottom: 16}}>
+                      <strong style={{display: "block", marginBottom: 8}}>📄 Sheets:</strong>
+                      <SongSheets songId={s.id} key={`sheets-${s.id}-${updateTrigger[s.id] || 0}`} onUpdate={() => triggerUpdate(s.id)} />
+                    </div>
+                    <div>
+                      <strong style={{display: "block", marginBottom: 8}}>🔗 Links:</strong>
+                      <SongLinks songId={s.id} key={`links-${s.id}-${updateTrigger[s.id] || 0}`} onUpdate={() => triggerUpdate(s.id)} />
+                    </div>
                   </td>
                 </tr>
               )}
@@ -184,6 +227,56 @@ export default function RepertoirePage() {
           )}
         </tbody>
       </table>
+
+      {/* Link Modal */}
+      <Modal open={showLinkModal} onClose={() => { setShowLinkModal(false); setCurrentSongId(null) }} title="Add Link to Song">
+        <form onSubmit={handleAddLink} style={{padding: 20}}>
+          <div className="field">
+            <label htmlFor="link-title">Title *</label>
+            <input
+              id="link-title"
+              placeholder="Link title"
+              value={linkForm.title}
+              onChange={e => setLinkForm({...linkForm, title: e.target.value})}
+              required
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="link-url">URL *</label>
+            <input
+              id="link-url"
+              type="url"
+              placeholder="https://..."
+              value={linkForm.url}
+              onChange={e => setLinkForm({...linkForm, url: e.target.value})}
+              required
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="link-category">Category</label>
+            <input
+              id="link-category"
+              placeholder="Tutorial, Reference, etc."
+              value={linkForm.category}
+              onChange={e => setLinkForm({...linkForm, category: e.target.value})}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="link-notes">Notes</label>
+            <textarea
+              id="link-notes"
+              placeholder="Additional notes..."
+              value={linkForm.notes}
+              onChange={e => setLinkForm({...linkForm, notes: e.target.value})}
+              style={{minHeight: 80}}
+            />
+          </div>
+          <div className="actions" style={{marginTop: 16}}>
+            <button type="button" onClick={() => { setShowLinkModal(false); setCurrentSongId(null) }}>Cancel</button>
+            <button type="submit" disabled={busy || !linkForm.title.trim() || !linkForm.url.trim()}>Add Link</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   )
 }

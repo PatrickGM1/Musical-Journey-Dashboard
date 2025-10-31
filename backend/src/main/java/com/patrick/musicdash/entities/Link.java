@@ -31,4 +31,8 @@ public class Link {
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "song_id")
+    private Song song;
 }
