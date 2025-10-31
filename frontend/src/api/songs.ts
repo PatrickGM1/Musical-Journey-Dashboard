@@ -1,4 +1,3 @@
-// ---------- SONGS ----------
 export type SongView = {
   id: string
   title: string

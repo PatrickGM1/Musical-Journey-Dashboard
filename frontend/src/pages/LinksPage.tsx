@@ -13,7 +13,7 @@ export default function LinksPage() {
   const [url, setUrl] = useState("");
   const [category, setCategory] = useState("");
   const [notes, setNotes] = useState("");
-  const [tagsStr, setTagsStr] = useState(""); // comma-separated input
+  const [tagsStr, setTagsStr] = useState("");
   const [favOnly, setFavOnly] = useState(false);
   const [busy, setBusy] = useState(false);
   const [q, setQ] = useState("");

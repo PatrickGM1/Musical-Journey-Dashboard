@@ -112,19 +112,19 @@ export default function RepertoirePage() {
         <div className="field span-4">
           <label htmlFor="title">Title</label>
           <input id="title" placeholder="Song title" value={form.title}
-                 onChange={e=>setForm({...form, title: e.target.value})}/>
+            onChange={e => setForm({ ...form, title: e.target.value })} />
         </div>
 
         <div className="field span-3">
           <label htmlFor="artist">Artist / Composer</label>
           <input id="artist" placeholder="Artist" value={form.artist}
-                 onChange={e=>setForm({...form, artist: e.target.value})}/>
+            onChange={e => setForm({ ...form, artist: e.target.value })} />
         </div>
 
         <div className="field span-1">
           <label htmlFor="instrument">Instr.</label>
           <select id="instrument" value={form.instrument}
-                  onChange={e=>setForm({...form, instrument: e.target.value})}>
+            onChange={e => setForm({ ...form, instrument: e.target.value })}>
             <option>Piano</option>
             <option>Guitar</option>
             <option>Other</option>
@@ -134,7 +134,7 @@ export default function RepertoirePage() {
         <div className="field span-2">
           <label htmlFor="status">Status</label>
           <select id="status" value={form.status}
-                  onChange={e=>setForm({...form, status: e.target.value as SongView["status"]})}>
+            onChange={e => setForm({ ...form, status: e.target.value as SongView["status"] })}>
             {STATUS.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
@@ -142,26 +142,26 @@ export default function RepertoirePage() {
         <div className="field span-1">
           <label htmlFor="key">Key</label>
           <input id="key" placeholder="e.g., Em" value={form.keySig}
-                 onChange={e=>setForm({...form, keySig: e.target.value})}/>
+            onChange={e => setForm({ ...form, keySig: e.target.value })} />
         </div>
 
         <div className="field span-1">
           <label htmlFor="bpm">BPM</label>
           <input id="bpm" type="number" min={20} max={400} value={form.bpm}
-                 onChange={e=>setForm({...form, bpm: Number(e.target.value) || undefined})}/>
+            onChange={e => setForm({ ...form, bpm: Number(e.target.value) || undefined })} />
         </div>
 
         {/* Row 2 */}
         <div className="field span-8">
           <label htmlFor="notes">Notes</label>
           <input id="notes" placeholder="Fingerings, references, etc." value={form.notes}
-                 onChange={e=>setForm({...form, notes: e.target.value})}/>
+            onChange={e => setForm({ ...form, notes: e.target.value })} />
         </div>
 
         <div className="field span-3">
           <label htmlFor="search">Search</label>
           <input id="search" placeholder="Search…" value={q}
-                 onChange={e=>setQ(e.target.value)}/>
+            onChange={e => setQ(e.target.value)} />
         </div>
 
         <div className="actions span-1">
@@ -188,15 +188,24 @@ export default function RepertoirePage() {
                 <td>{s.keySig}</td>
                 <td>{s.bpm}</td>
                 <td>{s.notes}</td>
+<<<<<<< HEAD
                 <td className="right" style={{whiteSpace:'nowrap'}}>
                   <button className="chip" title="Toggle sheets & links" onClick={()=>setExpanded({...expanded, [s.id]: !expanded[s.id]})}>📎</button>
                   <button className="chip" disabled={s.status==='LEARNING'} onClick={()=>handleStatus(s.id, prevStatus(s.status))}>◀</button>
                   <button className="chip" disabled={s.status==='MASTERED'} onClick={()=>handleStatus(s.id, nextStatus(s.status))}>▶</button>
                   <button className="chip danger" onClick={()=>handleDelete(s.id)}>Delete</button>
                   <label className="chip" style={{cursor:"pointer", marginLeft: 8}}>
+=======
+                <td className="right" style={{ whiteSpace: 'nowrap' }}>
+                  <button className="chip" title="Toggle sheets" onClick={() => setExpanded({ ...expanded, [s.id]: !expanded[s.id] })}>📎</button>
+                  <button className="chip" disabled={s.status === 'LEARNING'} onClick={() => handleStatus(s.id, prevStatus(s.status))}>◀</button>
+                  <button className="chip" disabled={s.status === 'MASTERED'} onClick={() => handleStatus(s.id, nextStatus(s.status))}>▶</button>
+                  <button className="chip danger" onClick={() => handleDelete(s.id)}>Delete</button>
+                  <label className="chip" style={{ cursor: "pointer", marginLeft: 8 }}>
+>>>>>>> 69caa087b86f848d8cae825b6e309836a751b9bd
                     Attach Sheet
-                    <input type="file" style={{display:"none"}} onChange={async (e)=>{
-                      const f = e.target.files?.[0]; if(!f) return
+                    <input type="file" style={{ display: "none" }} onChange={async (e) => {
+                      const f = e.target.files?.[0]; if (!f) return
                       try {
                         await uploadSheetWithSong(f, { songId: s.id, instrument: s.instrument, songTitle: s.title })
                         triggerUpdate(s.id)
@@ -208,6 +217,7 @@ export default function RepertoirePage() {
               </tr>
               {expanded[s.id] && (
                 <tr>
+<<<<<<< HEAD
                   <td colSpan={8} style={{background:"#161616"}}>
                     <div style={{marginBottom: 16}}>
                       <strong style={{display: "block", marginBottom: 8}}>📄 Sheets:</strong>
@@ -217,6 +227,10 @@ export default function RepertoirePage() {
                       <strong style={{display: "block", marginBottom: 8}}>🔗 Links:</strong>
                       <SongLinks songId={s.id} key={`links-${s.id}-${updateTrigger[s.id] || 0}`} onUpdate={() => triggerUpdate(s.id)} />
                     </div>
+=======
+                  <td colSpan={8} style={{ background: "#161616" }}>
+                    <SongSheets songId={s.id} />
+>>>>>>> 69caa087b86f848d8cae825b6e309836a751b9bd
                   </td>
                 </tr>
               )}
