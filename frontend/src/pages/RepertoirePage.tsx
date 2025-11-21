@@ -188,21 +188,12 @@ export default function RepertoirePage() {
                 <td>{s.keySig}</td>
                 <td>{s.bpm}</td>
                 <td>{s.notes}</td>
-<<<<<<< HEAD
                 <td className="right" style={{whiteSpace:'nowrap'}}>
                   <button className="chip" title="Toggle sheets & links" onClick={()=>setExpanded({...expanded, [s.id]: !expanded[s.id]})}>📎</button>
                   <button className="chip" disabled={s.status==='LEARNING'} onClick={()=>handleStatus(s.id, prevStatus(s.status))}>◀</button>
                   <button className="chip" disabled={s.status==='MASTERED'} onClick={()=>handleStatus(s.id, nextStatus(s.status))}>▶</button>
                   <button className="chip danger" onClick={()=>handleDelete(s.id)}>Delete</button>
                   <label className="chip" style={{cursor:"pointer", marginLeft: 8}}>
-=======
-                <td className="right" style={{ whiteSpace: 'nowrap' }}>
-                  <button className="chip" title="Toggle sheets" onClick={() => setExpanded({ ...expanded, [s.id]: !expanded[s.id] })}>📎</button>
-                  <button className="chip" disabled={s.status === 'LEARNING'} onClick={() => handleStatus(s.id, prevStatus(s.status))}>◀</button>
-                  <button className="chip" disabled={s.status === 'MASTERED'} onClick={() => handleStatus(s.id, nextStatus(s.status))}>▶</button>
-                  <button className="chip danger" onClick={() => handleDelete(s.id)}>Delete</button>
-                  <label className="chip" style={{ cursor: "pointer", marginLeft: 8 }}>
->>>>>>> 69caa087b86f848d8cae825b6e309836a751b9bd
                     Attach Sheet
                     <input type="file" style={{ display: "none" }} onChange={async (e) => {
                       const f = e.target.files?.[0]; if (!f) return
@@ -217,7 +208,6 @@ export default function RepertoirePage() {
               </tr>
               {expanded[s.id] && (
                 <tr>
-<<<<<<< HEAD
                   <td colSpan={8} style={{background:"#161616"}}>
                     <div style={{marginBottom: 16}}>
                       <strong style={{display: "block", marginBottom: 8}}>📄 Sheets:</strong>
@@ -227,10 +217,6 @@ export default function RepertoirePage() {
                       <strong style={{display: "block", marginBottom: 8}}>🔗 Links:</strong>
                       <SongLinks songId={s.id} key={`links-${s.id}-${updateTrigger[s.id] || 0}`} onUpdate={() => triggerUpdate(s.id)} />
                     </div>
-=======
-                  <td colSpan={8} style={{ background: "#161616" }}>
-                    <SongSheets songId={s.id} />
->>>>>>> 69caa087b86f848d8cae825b6e309836a751b9bd
                   </td>
                 </tr>
               )}

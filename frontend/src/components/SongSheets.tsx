@@ -9,7 +9,6 @@ function SongSheets({ songId, onUpdate }: { songId: string; onUpdate?: () => voi
     try { setFiles(await listSheets({ songId })) }
     finally { setBusy(false) }
   }
-<<<<<<< HEAD
   useEffect(()=>{ load() }, [songId])
   
   useEffect(() => {
@@ -17,9 +16,6 @@ function SongSheets({ songId, onUpdate }: { songId: string; onUpdate?: () => voi
       load()
     }
   }, [onUpdate])
-=======
-  useEffect(() => { load() }, [songId])
->>>>>>> 69caa087b86f848d8cae825b6e309836a751b9bd
 
   if (!files || files.length === 0) return <div className="muted" style={{ padding: "8px 0" }}>No sheets linked.</div>
 
