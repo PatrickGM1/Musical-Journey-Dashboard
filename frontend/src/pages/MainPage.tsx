@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 
+/** Tile configuration for the main page navigation */
 type Tile = {
     to?: string
     title: string
@@ -7,6 +8,7 @@ type Tile = {
     wip?: boolean
 }
 
+/** Navigation tiles displayed on the home page */
 const tiles: Tile[] = [
     { to: "/practice", title: "Practice", subtitle: "Log sessions, track minutes" },
     { to: "/repertoire", title: "Repertoire", subtitle: "Songs you’re learning" },
@@ -14,6 +16,12 @@ const tiles: Tile[] = [
     { to: "/links", title: "Links", subtitle: "Tutorials & references" },
 ]
 
+/**
+ * MainPage Component
+ * 
+ * Landing page displaying navigation tiles to different sections
+ * of the Musical Journey Dashboard.
+ */
 export default function MainPage() {
     return (
         <div className="main-page">

@@ -1,6 +1,12 @@
 import { NavLink, Link } from "react-router-dom"
 import "./topbar.css"
 
+/**
+ * TopBar Component
+ * 
+ * Renders the main navigation bar with links to all pages.
+ * Uses NavLink for active state styling and includes the app branding.
+ */
 export default function TopBar() {
   return (
     <div className="topbar">

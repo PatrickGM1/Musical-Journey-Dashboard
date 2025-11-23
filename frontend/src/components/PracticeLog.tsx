@@ -2,9 +2,16 @@ import { useEffect, useState } from 'react'
 import type { PracticeView } from '../api/practice'
 import { addPractice, deletePractice, listPractice } from '../api/practice'
 
-
+/** Returns today's date in YYYY-MM-DD format */
 const today = () => new Date().toISOString().slice(0, 10)
 
+/**
+ * PracticeLog Component
+ * 
+ * Manages practice session logging with a form and table view.
+ * Users can record practice sessions with details like date, instrument,
+ * focus area, duration, notes, and mood.
+ */
 export default function PracticeLog() {
   const [items, setItems] = useState<PracticeView[]>([])
   const [busy, setBusy] = useState(false)

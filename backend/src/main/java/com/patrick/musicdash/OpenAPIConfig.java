@@ -9,8 +9,16 @@ import io.swagger.v3.oas.models.ExternalDocumentation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration for OpenAPI/Swagger documentation.
+ * Provides API documentation accessible at /swagger-ui.html
+ */
 @Configuration
 public class OpenAPIConfig {
+  /**
+   * Configures the OpenAPI specification for the API.
+   * @return customized OpenAPI configuration
+   */
   @Bean
   public OpenAPI customOpenAPI() {
     return new OpenAPI()

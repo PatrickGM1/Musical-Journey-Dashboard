@@ -7,6 +7,13 @@ import {
   type LinkView,
 } from "../api/links";
 
+/**
+ * LinksPage Component
+ * 
+ * Manages web links and resources for tutorials, backing tracks, references, etc.
+ * Supports adding, deleting, favoriting, tagging, and filtering links.
+ * Links can be organized by category and searched by multiple fields.
+ */
 export default function LinksPage() {
   const [links, setLinks] = useState<LinkView[]>([]);
   const [title, setTitle] = useState("");

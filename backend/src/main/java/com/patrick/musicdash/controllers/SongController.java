@@ -11,17 +11,30 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * REST controller for managing songs in the musical repertoire.
+ * Provides endpoints for CRUD operations and status updates.
+ */
 @RestController
 @RequestMapping("/api/songs")
 public class SongController {
   private final SongRepo repo;
   public SongController(SongRepo repo) { this.repo = repo; }
 
+  /**
+   * Retrieves all songs in the repertoire.
+   * @return list of all songs
+   */
   @GetMapping
   public List<SongView> list() {
     return repo.findAll().stream().map(this::view).collect(Collectors.toList());
   }
 
+  /**
+   * Creates a new song entry.
+   * @param in song creation data
+   * @return the created song
+   */
   @PostMapping
   public SongView create(@RequestBody @Valid SongCreate in) {
     var status = in.status == null ? Song.Status.LEARNING : Song.Status.valueOf(in.status);
@@ -37,6 +50,12 @@ public class SongController {
     return view(repo.save(s));
   }
 
+  /**
+   * Updates the learning status of a song.
+   * @param id song ID
+   * @param status new status (LEARNING, POLISHING, or MASTERED)
+   * @return updated song
+   */
   @PatchMapping("/{id}/status/{status}")
   public SongView updateStatus(@PathVariable UUID id, @PathVariable String status) {
     var s = repo.findById(id).orElseThrow();
@@ -44,6 +63,10 @@ public class SongController {
     return view(repo.save(s));
   }
 
+  /**
+   * Deletes a song from the repertoire.
+   * @param id song ID to delete
+   */
   @DeleteMapping("/{id}")
   public void delete(@PathVariable UUID id) { repo.deleteById(id); }
 

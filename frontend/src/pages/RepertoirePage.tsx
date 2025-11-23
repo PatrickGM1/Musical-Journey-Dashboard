@@ -7,10 +7,20 @@ import SongSheets from "../components/SongSheets"
 import SongLinks from "../components/SongLinks"
 import Modal from "../components/Modal"
 
+/** Valid song status values in progression order */
 const STATUS: SongView["status"][] = ["LEARNING", "POLISHING", "MASTERED"]
+/** Returns the next status in progression, or current if already at max */
 const nextStatus = (s: SongView["status"]) => STATUS[Math.min(STATUS.indexOf(s) + 1, STATUS.length - 1)]
+/** Returns the previous status in progression, or current if already at min */
 const prevStatus = (s: SongView["status"]) => STATUS[Math.max(STATUS.indexOf(s) - 1, 0)]
 
+/**
+ * RepertoirePage Component
+ * 
+ * Main page for managing the song repertoire.
+ * Allows adding songs, updating their status (Learning → Polishing → Mastered),
+ * attaching sheets and links, and searching/filtering the song list.
+ */
 export default function RepertoirePage() {
   const [songs, setSongs] = useState<SongView[]>([])
   const [busy, setBusy] = useState(false)

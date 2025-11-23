@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react"
 import { listLinks, deleteLink, type LinkView } from "../api/links"
 
+/**
+ * SongLinks Component
+ * 
+ * Displays web links associated with a specific song.
+ * Shows chips with clickable links and delete buttons.
+ * 
+ * @param {string} songId - The ID of the song to display links for
+ * @param {() => void} [onUpdate] - Optional callback triggered when links should be reloaded
+ * 
+ * @example
+ * <SongLinks songId="123" onUpdate={handleLinksUpdate} />
+ */
 function SongLinks({ songId, onUpdate }: { songId: string; onUpdate?: () => void }) {
   const [links, setLinks] = useState<LinkView[]>([])
   const [busy, setBusy] = useState(false)

@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * REST controller for managing practice session logs.
+ * Tracks daily practice activities and provides analytics data.
+ */
 @RestController
 @RequestMapping("/api/practice")
 public class PracticeController {
@@ -21,11 +25,20 @@ public class PracticeController {
     this.repo = repo;
   }
 
+  /**
+   * Retrieves all practice logs.
+   * @return list of all practice sessions
+   */
   @GetMapping
   public List<PracticeView> list() {
     return repo.findAll().stream().map(this::view).collect(Collectors.toList());
   }
 
+  /**
+   * Creates a new practice log entry.
+   * @param in practice session data
+   * @return the created practice log
+   */
   @PostMapping
   public PracticeView create(@RequestBody @Valid PracticeCreate in) {
     PracticeLog p = PracticeLog.builder()
@@ -39,6 +52,10 @@ public class PracticeController {
     return view(repo.save(p));
   }
 
+  /**
+   * Deletes a practice log entry.
+   * @param id practice log ID to delete
+   */
   @DeleteMapping("/{id}")
   public void delete(@PathVariable UUID id) {
     repo.deleteById(id);

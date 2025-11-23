@@ -1,5 +1,21 @@
 import React from "react";
 
+/**
+ * Modal Component
+ * 
+ * A reusable modal dialog for displaying content in an overlay.
+ * Includes a backdrop, title bar, and close functionality.
+ * 
+ * @param {boolean} open - Whether the modal is visible
+ * @param {() => void} onClose - Callback when the modal is closed
+ * @param {string} [title] - Optional title for the modal header
+ * @param {React.ReactNode} children - Content to display in the modal body
+ * 
+ * @example
+ * <Modal open={showModal} onClose={() => setShowModal(false)} title="Preview">
+ *   <iframe src="..." />
+ * </Modal>
+ */
 export default function Modal({
   open, onClose, children, title
 }: { open: boolean; onClose: () => void; title?: string; children: React.ReactNode }) {

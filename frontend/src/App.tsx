@@ -8,6 +8,10 @@ import LinksPage from "./pages/LinksPage";
 
 import "./index.css";
 
+/**
+ * Main application component.
+ * Sets up routing and layout for the Musical Journey Dashboard.
+ */
 export default function App() {
   return (
     <>

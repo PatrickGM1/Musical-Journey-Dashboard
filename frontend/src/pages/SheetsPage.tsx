@@ -2,6 +2,13 @@ import { useEffect, useState } from "react"
 import { deleteSheet, downloadSheetUrl, listSheets, uploadSheetWithSong, type SheetView } from "../api/sheets"
 import Modal from "../components/Modal"
 
+/**
+ * SheetsPage Component
+ * 
+ * Manages sheet music file uploads and downloads.
+ * Supports PDF preview, filtering by song, and file metadata.
+ * Users can upload sheet music files and link them to songs.
+ */
 export default function SheetsPage() {
   const [items, setItems] = useState<SheetView[]>([])
   const [busy, setBusy] = useState(false)
@@ -17,6 +24,7 @@ export default function SheetsPage() {
   }
   useEffect(() => { load() }, [])
 
+  /** Checks if a file is a PDF based on content type or filename */
   const isPdf = (ct?: string, name?: string) =>
     (ct && ct.toLowerCase().includes("pdf")) || (name && name.toLowerCase().endsWith(".pdf"))
 
@@ -41,6 +49,7 @@ export default function SheetsPage() {
     finally { setBusy(false) }
   }
 
+  /** Formats file size in bytes to human-readable format (B, KB, or MB) */
   const fmt = (n: number) => n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(1)} MB`
 
   return (

@@ -23,6 +23,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * REST controller for managing sheet music files.
+ * Handles upload, download, and deletion of PDF and other sheet music documents.
+ */
 @RestController
 @RequestMapping("/api/sheets")
 @RequiredArgsConstructor
@@ -32,6 +36,11 @@ public class SheetController {
   private final StorageService storage;
   private final SongRepo songRepo;
 
+  /**
+   * Retrieves all sheet music files, optionally filtered by song.
+   * @param songId optional song ID to filter sheets by
+   * @return list of sheet music files
+   */
   @GetMapping
   public List<SheetView> list(@RequestParam(value = "songId", required = false) UUID songId) {
     List<Sheet> all = (songId == null)
@@ -42,6 +51,15 @@ public class SheetController {
     return all.stream().map(this::view).collect(Collectors.toList());
   }
 
+  /**
+   * Uploads a new sheet music file.
+   * @param file the uploaded file (PDF, image, etc.)
+   * @param instrument optional instrument type
+   * @param songTitle optional song title for metadata
+   * @param songId optional song ID to link the sheet to
+   * @return the created sheet metadata
+   * @throws IOException if file storage fails
+   */
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public SheetView upload(@RequestPart("file") MultipartFile file,
                           @RequestParam(value = "instrument", required = false) String instrument,
@@ -73,6 +91,13 @@ public class SheetController {
   return view(saved);
   }
 
+  /**
+   * Downloads a sheet music file.
+   * @param id sheet ID to download
+   * @param inline if true, opens in browser; if false, downloads as attachment
+   * @return file resource with appropriate headers
+   * @throws IOException if file access fails
+   */
   @GetMapping("/{id}/download")
   public ResponseEntity<FileSystemResource> download(
       @PathVariable UUID id,
@@ -104,6 +129,11 @@ public class SheetController {
     return new ResponseEntity<>(file, headers, HttpStatus.OK);
   }
 
+  /**
+   * Deletes a sheet music file and its metadata.
+   * @param id sheet ID to delete
+   * @throws IOException if file deletion fails
+   */
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable UUID id) throws IOException {

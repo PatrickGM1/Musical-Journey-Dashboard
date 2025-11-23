@@ -5,6 +5,10 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * Entity representing a practice session log.
+ * Tracks daily practice activities including duration, focus areas, and mood.
+ */
 @Entity
 @Table(name = "practice_logs")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder

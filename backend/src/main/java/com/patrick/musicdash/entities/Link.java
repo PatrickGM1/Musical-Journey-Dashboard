@@ -6,6 +6,11 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+/**
+ * Entity representing a web link resource.
+ * Can store references to YouTube videos, tutorials, backing tracks, or other
+ * online resources. Links can be categorized, tagged, favorited, and associated with songs.
+ */
 @Entity
 @Data
 @Builder

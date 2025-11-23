@@ -5,6 +5,11 @@ import lombok.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+/**
+ * Entity representing uploaded sheet music files.
+ * Stores metadata and file information for PDFs and other sheet music documents.
+ * Can be linked to a specific song for organization.
+ */
 @Entity
 @Table(name = "sheets")
 @Data

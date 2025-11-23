@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react"
 import { listSheets, downloadSheetUrl, deleteSheet, type SheetView } from "../api/sheets"
 
+/**
+ * SongSheets Component
+ * 
+ * Displays sheet music files linked to a specific song.
+ * Shows chips with download links and delete buttons for each sheet.
+ * 
+ * @param {string} songId - The ID of the song to display sheets for
+ * @param {() => void} [onUpdate] - Optional callback triggered when sheets should be reloaded
+ * 
+ * @example
+ * <SongSheets songId="123" onUpdate={handleSheetsUpdate} />
+ */
 function SongSheets({ songId, onUpdate }: { songId: string; onUpdate?: () => void }) {
   const [files, setFiles] = useState<SheetView[]>([])
   const [busy, setBusy] = useState(false)
