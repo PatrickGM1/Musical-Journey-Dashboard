@@ -1,0 +1,50 @@
+name: Deploy musicdash.guba.dev
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            APP_DIR=/var/www/musicdash
+
+            # --- Pull latest code ---
+            mkdir -p "$APP_DIR"
+
+            if [ ! -d "$APP_DIR/.git" ]; then
+              git init "$APP_DIR"
+              git -C "$APP_DIR" remote add origin https://github.com/PatrickGM1/Musical-Journey-Dashboard.git
+            fi
+
+            git config --global --add safe.directory "$APP_DIR"
+            git -C "$APP_DIR" remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/PatrickGM1/Musical-Journey-Dashboard.git
+            git -C "$APP_DIR" fetch --all
+            git -C "$APP_DIR" reset --hard origin/main
+
+            # --- Ensure .env exists (must be set up manually once) ---
+            if [ ! -f "$APP_DIR/.env" ]; then
+              echo "ERROR: $APP_DIR/.env not found. Create it from .env.example before deploying."
+              exit 1
+            fi
+
+            # --- Install docker if missing ---
+            if ! command -v docker &>/dev/null; then
+              apt-get update && apt-get install -y docker.io docker-compose-plugin
+              systemctl enable docker && systemctl start docker
+            fi
+
+            # --- Build and restart containers ---
+            cd "$APP_DIR"
+            docker compose pull --quiet || true
+            docker compose up --build -d
+
+            # --- Show running containers ---
+            docker compose ps
